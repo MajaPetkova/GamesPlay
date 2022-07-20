@@ -2,9 +2,9 @@ const LatestGame=({game})=>{
 return(
     <div className="game">
           <div className="image-wrap">
-            <img src="./images/CoverFire.png" />
+            <img src={game.imageUrl}/>
           </div>
-          <h3>Cover Fire</h3>
+          <h3>{game.title}</h3>
           <div className="rating">
             <span>☆</span>
             <span>☆</span>
