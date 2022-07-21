@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import * as gameService from './services/gameSevice';
+import uniqid from 'uniqid';
 
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import './App.css';
 import Catalog from './components/catalog/Catalog';
 import Create from './components/create/Create';
@@ -14,6 +15,7 @@ import Details from './components/details/Details';
 
 function App() {
     const [games, setGames] = useState([]);
+    const navigate= useNavigate();
 
     const addComment = (gameId, comment) => {
         setGames(state => {
@@ -21,11 +23,22 @@ function App() {
             const comments = game.comments || [];
             comments.push(comment)
 
-            return[
-                ...state.filter(x=>x._id !== gameId),
-                {...game, comments}
+            return [
+                ...state.filter(x => x._id !== gameId),
+                { ...game, comments }
             ]
         })
+    }
+
+    const addGameHandler = (gameData) => {
+        setGames(state=>[
+            ...state,
+            {
+                ...gameData,
+             _id: uniqid()
+            }
+        ]);
+        navigate('/catalog')
     }
 
     useEffect(() => {
@@ -38,15 +51,14 @@ function App() {
     return (
         <div id="box">
             <Header />
-
             <main id="main-content">
                 <Routes>
                     <Route path='/' element={<Home games={games} />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/register' element={<Register />} />
-                    <Route path='/create' element={<Create />} />
+                    <Route path='/create' element={<Create addGameHandler={addGameHandler} />} />
                     <Route path='/catalog' element={<Catalog games={games} />} />
-                    <Route path='/catalog/:gameId' element={<Details games={games}  addComment={addComment}/>} />
+                    <Route path='/catalog/:gameId' element={<Details games={games} addComment={addComment} />} />
 
                 </Routes>
 

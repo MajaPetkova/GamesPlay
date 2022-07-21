@@ -4,27 +4,26 @@ import { useState } from "react";
 const Details = ({
     games,
     addComment
-     }) => {
-    const {gameId}= useParams(); 
-    const[comment, setComment]= useState({
-        username:'',
-        comment:''
+}) => {
+    const { gameId } = useParams();
+    const [comment, setComment] = useState({
+        username: '',
+        comment: ''
     });
-    const game= games.find(x=>x._id===gameId)
+    const game = games.find(x => x._id === gameId)
 
-       const addCommentHandler=(e)=>{
+    const addCommentHandler = (e) => {
         e.preventDefault()
         // console.log(comment)
-        let result=`${comment.username}: ${comment.comment}`
+        let result = `${comment.username}: ${comment.comment}`
         addComment(gameId, result)
-       }
-       const onChange=(e)=>{
-          setComment(state=>({
+    }
+    const onChange = (e) => {
+        setComment(state => ({
             ...state,
             [e.target.name]: e.target.value
-
-          }))
-       }
+        }))
+    }
 
     return (
         <section id="game-details">
@@ -37,49 +36,49 @@ const Details = ({
                     <p className="type">{game.category}</p>
                 </div>
                 <p className="text">
-                  {game.summary}
+                    {game.summary}
                 </p>
                 {/* Bonus ( for Guests and Users ) */}
                 <div className="details-comments">
                     <h2>Comments:</h2>
                     <ul>
-                        {game.comments?.map(x=> 
-                         <li className="comment">
-                         <p> {x}</p>
-                         </li>   
+                        {game.comments?.map(x =>
+                            <li className="comment">
+                                <p> {x}</p>
+                            </li>
                         )}
                     </ul>
 
                     {!game.comments && <p className="no-comment">No comments.</p>}
-                                        
+
                 </div>
-               
-                 <div className="buttons">
-                   <Link to="#" className="button">
-                     Edit
+
+                <div className="buttons">
+                    <Link to="#" className="button">
+                        Edit
                     </Link>
-                   <Link to="#" className="button">
-                      Delete
+                    <Link to="#" className="button">
+                        Delete
                     </Link>
-                   </div> 
+                </div>
             </div>
             {/* Bonus */}
             {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
-         <article className="create-comment">
+            <article className="create-comment">
                 <label>Add new comment:</label>
                 <form className="form" onSubmit={addCommentHandler}>
-                    <input 
-                    type="text" 
-                    name="username" 
-                    placeholder="John Doe"
-                    onChange={onChange}
-                    value={comment.username}
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="John Doe"
+                        onChange={onChange}
+                        value={comment.username}
                     />
                     <textarea
                         name="comment"
                         placeholder="Comment......"
                         onChange={onChange}
-                        value= {comment.comment}
+                        value={comment.comment}
                     />
                     <input
                         className="btn submit"
@@ -87,7 +86,7 @@ const Details = ({
                         value="Add Comment"
                     />
                 </form>
-            </article> 
+            </article>
         </section>
     )
 }
