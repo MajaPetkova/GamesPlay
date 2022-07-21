@@ -43,26 +43,25 @@ const Details = ({
                 <div className="details-comments">
                     <h2>Comments:</h2>
                     <ul>
-                        {/* list all comments for current game (If any) */}
-                        <li className="comment">
-                            <p>Content: I rate this one quite highly.</p>
-                        </li>
-                        <li className="comment">
-                            <p>Content: The best game.</p>
-                        </li>
+                        {game.comments?.map(x=> 
+                         <li className="comment">
+                         <p> {x}</p>
+                         </li>   
+                        )}
                     </ul>
-                    {/* Display paragraph: If there are no games in the database */}
-                    <p className="no-comment">No comments.</p>
+
+                    {!game.comments && <p className="no-comment">No comments.</p>}
+                                        
                 </div>
-                {/* Edit/Delete buttons ( Only for creator of this game )  */}
-                 {/* <div className="buttons">
+               
+                 <div className="buttons">
                    <a href="#" className="button">
                      Edit
                     </a>
                    <a href="#" className="button">
                       Delete
                     </a>
-                   </div>  */}
+                   </div> 
             </div>
             {/* Bonus */}
             {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
