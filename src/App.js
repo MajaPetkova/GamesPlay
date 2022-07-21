@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as gameService from './services/gameSevice';
 
-import {Routes, Route} from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import './App.css';
 import Catalog from './components/catalog/Catalog';
 import Create from './components/create/Create';
@@ -14,34 +14,47 @@ import Details from './components/details/Details';
 
 function App() {
     const [games, setGames] = useState([]);
-    
-  useEffect(() => {
-    gameService.getAll()
-      .then(result => {
-        // console.log(result)
-        setGames(result)
-      })
-  }, [])
-  return (
-    <div id="box">
-       <Header/>
-  
-  <main id="main-content">
-   <Routes>
-    <Route path='/' element={<Home games={games}/>}/>
-    <Route path='/login' element={<Login/>}/>
-    <Route path='/register' element={<Register/>}/>
-    <Route path='/create' element={<Create/>}/>
-    <Route path='/catalog' element={<Catalog games={games}/>}/>
-    <Route path='/catalog/:gameId' element={<Details/>}/>
 
-   </Routes>
+    const addComment = (gameId, comment) => {
+        setGames(state => {
+            const game = state.find(x => x._id === gameId)
+            const comments = game.comments || [];
+            comments.push(comment)
 
-  </main>
+            return[
+                ...state.filter(x=>x._id !== gameId),
+                {...game, comments}
+            ]
+        })
+    }
+
+    useEffect(() => {
+        gameService.getAll()
+            .then(result => {
+                // console.log(result)
+                setGames(result)
+            })
+    }, [])
+    return (
+        <div id="box">
+            <Header />
+
+            <main id="main-content">
+                <Routes>
+                    <Route path='/' element={<Home games={games} />} />
+                    <Route path='/login' element={<Login />} />
+                    <Route path='/register' element={<Register />} />
+                    <Route path='/create' element={<Create />} />
+                    <Route path='/catalog' element={<Catalog games={games} />} />
+                    <Route path='/catalog/:gameId' element={<Details games={games}  addComment={addComment}/>} />
+
+                </Routes>
+
+            </main>
 
 
-{/* Edit Page ( Only for the creator )*/}
-{/* <section id="edit-page" className="auth">
+            {/* Edit Page ( Only for the creator )*/}
+            {/* <section id="edit-page" className="auth">
 <form id="edit">
   <div className="container">
     <h1>Edit Game</h1>
@@ -66,11 +79,11 @@ function App() {
 </form>
  </section>
   {/*Details Page*/}
-  
 
-</div>
 
-  );
+        </div>
+
+    );
 }
 
 export default App;
