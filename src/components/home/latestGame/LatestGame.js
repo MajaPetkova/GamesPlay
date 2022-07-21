@@ -15,7 +15,7 @@ return(
             <span>☆</span>
           </div>
           <div className="data-buttons">
-            <Link to="#" className="btn details-btn">
+            <Link to={`/catalog/${game._id}`} className="btn details-btn">
               Details
             </Link>
           </div>
