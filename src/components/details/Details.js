@@ -98,7 +98,7 @@ const Details = ({
                         value={comment.username}
                     />
                      {error.username &&
-                     <div style={{color:'white'}}>{error.username}</div>
+                     <div style={{color:'red'}}>{error.username}</div>
                      }
                     <textarea
                         name="comment"
