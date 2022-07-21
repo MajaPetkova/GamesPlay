@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 
 const Details = ({
@@ -55,12 +55,12 @@ const Details = ({
                 </div>
                
                  <div className="buttons">
-                   <a href="#" className="button">
+                   <Link to="#" className="button">
                      Edit
-                    </a>
-                   <a href="#" className="button">
+                    </Link>
+                   <Link to="#" className="button">
                       Delete
-                    </a>
+                    </Link>
                    </div> 
             </div>
             {/* Bonus */}
