@@ -3,7 +3,8 @@ import * as gameService from './services/gameSevice';
 import uniqid from 'uniqid';
 
 import { Routes, Route, useNavigate } from 'react-router-dom'
-import './App.css';
+import { AuthContext } from './contexts/AuthContext';
+
 import Catalog from './components/catalog/Catalog';
 import Create from './components/create/Create';
 import Header from './components/header/Header';
@@ -15,7 +16,13 @@ import Details from './components/details/Details';
 
 function App() {
     const [games, setGames] = useState([]);
+    const [auth, setAuth]= useState({});
     const navigate= useNavigate();
+
+const userLogin=(authData)=>{
+    setAuth(authData)
+
+}
 
     const addComment = (gameId, comment) => {
         setGames(state => {
@@ -49,6 +56,9 @@ function App() {
             })
     }, [])
     return (
+        <AuthContext.Provider value={{auth, userLogin}}>
+    
+
         <div id="box">
             <Header />
             <main id="main-content">
@@ -68,14 +78,14 @@ function App() {
             {/* Edit Page ( Only for the creator )*/}
             {/* <section id="edit-page" className="auth">
 <form id="edit">
-  <div className="container">
-    <h1>Edit Game</h1>
-    <label htmlFor="leg-title">Legendary title:</label>
-    <input type="text" id="title" name="title" defaultValue="" />
-    <label htmlFor="category">Category:</label>
-    <input type="text" id="category" name="category" defaultValue="" />
-    <label htmlFor="levels">MaxLevel:</label>
-    <input
+<div className="container">
+<h1>Edit Game</h1>
+<label htmlFor="leg-title">Legendary title:</label>
+<input type="text" id="title" name="title" defaultValue="" />
+<label htmlFor="category">Category:</label>
+<input type="text" id="category" name="category" defaultValue="" />
+<label htmlFor="levels">MaxLevel:</label>
+<input
       type="number"
       id="maxLevel"
       name="maxLevel"
@@ -94,6 +104,7 @@ function App() {
 
 
         </div>
+    </AuthContext.Provider>
 
     );
 }
