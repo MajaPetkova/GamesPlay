@@ -17,6 +17,7 @@ export const request = async (method, url, data) => {
 
         }
         const responce = await buildRequest;
+        console.log(responce)
         const result = await responce.json();
         return result;
     } catch (error) {
