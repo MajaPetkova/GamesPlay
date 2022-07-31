@@ -9,4 +9,5 @@ const baseUrl = 'http://localhost:3030';
 
 // }
 
-export const getAll=()=>request.get(`${baseUrl}/data/games/`)
+export const getAll=()=>request.get(`${baseUrl}/data/games`);
+export const create=(gameData)=>request.post(`${baseUrl}/data/games`, gameData)

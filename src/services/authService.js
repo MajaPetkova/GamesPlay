@@ -11,7 +11,10 @@ export const logout = async (accessToken) => {
             headers: {
                 'X-Authorization': accessToken
             }
-        })
+        });
+
+        // localStorage.clear();
+
         return response
     } catch (error) {
         console.log(error)
