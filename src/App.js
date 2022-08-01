@@ -15,6 +15,7 @@ import Register from './components/register/Register';
 import Logout from './components/logout/Logout'
 import Details from './components/details/Details';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import EditGame from './components/edit/EditGame';
 
 function App() {
     const [games, setGames] = useState([]);
@@ -50,6 +51,10 @@ function App() {
         navigate('/catalog')
     }
 
+    const gameEdit= (gameId, gameData)=>{
+        setGames(state=>state.map(x=>x._id===gameId ? gameData : x))
+    }
+
     useEffect(() => {
         gameService.getAll()
             .then(result => {
@@ -62,7 +67,7 @@ function App() {
 
             <div id="box">
                 <Header />
-                <GameContext.Provider value={{games, gameAdd}}>
+                <GameContext.Provider value={{games, gameAdd, gameEdit}}>
                     <main id="main-content">
                         <Routes>
                             <Route path='/' element={<Home games={games} />} />
@@ -70,41 +75,13 @@ function App() {
                             <Route path='/register' element={<Register />} />
                             <Route path='/create' element={<Create  />} />
                             <Route path='/catalog' element={<Catalog games={games} />} />
+                            <Route path='/catalog/:gameId/edit' element={<EditGame />} />
                             <Route path='/catalog/:gameId' element={<Details games={games} addComment={addComment} />} />
                             <Route path='/logout' element={<Logout />} />
                         </Routes>
 
                     </main>
                     </GameContext.Provider>
-
-                {/* Edit Page ( Only for the creator )*/}
-                {/* <section id="edit-page" className="auth">
-<form id="edit">
-<div className="container">
-<h1>Edit Game</h1>
-<label htmlFor="leg-title">Legendary title:</label>
-<input type="text" id="title" name="title" defaultValue="" />
-<label htmlFor="category">Category:</label>
-<input type="text" id="category" name="category" defaultValue="" />
-<label htmlFor="levels">MaxLevel:</label>
-<input
-      type="number"
-      id="maxLevel"
-      name="maxLevel"
-      min={1}
-      defaultValue=""
-    />
-    <label htmlFor="game-img">Image:</label>
-    <input type="text" id="imageUrl" name="imageUrl" defaultValue="" />
-    <label htmlFor="summary">Summary:</label>
-    <textarea name="summary" id="summary" defaultValue={""} />
-    <input className="btn submit" type="submit" defaultValue="Edit Game" />
-  </div>
-</form>
- </section>
-  {/*Details Page*/}
-
-
             </div>
         </AuthContext.Provider>
 
