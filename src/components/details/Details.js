@@ -1,61 +1,50 @@
-import { Link, useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect } from "react";
 import * as gameService from '../../services/GameService';
+import * as commentService from '../../services/commentService'
 import { GameContext } from "../../contexts/GameContext";
+// import {AuthContext } from '../../contexts/AuthContext'
 
 const Details = () => {
-    
-    const { addComment } = useContext(GameContext)
+  const navigate= useNavigate();
+    const { addComment, fetchGameDetails, selectGame, gameRemove } = useContext(GameContext)
     const { gameId } = useParams();
-    const [currentGame, setCurrentGame] = useState({});
-
-
-    const [comment, setComment] = useState({
-        username: '',
-        comment: ''
-    });
-    const [error, setError] = useState({
-        username: '',
-        comment: ''
-    });
+    const currentGame = selectGame(gameId)
 
     useEffect(() => {
-        gameService.getOne(gameId)
-            .then(result => {
-                setCurrentGame(result)
-            })
-    }, [])
+        (async ()=>{
+       const gameDetails = await gameService.getOne(gameId)
+       const gameComments= await commentService.getByGameId(gameId)
+       
+       fetchGameDetails(gameId, {...gameDetails, comments: gameComments.map(x=>`${x.user.email}:${x.text}`)})
+    })();  
+    }, []);
 
-
-
+  
     const addCommentHandler = (e) => {
         e.preventDefault()
         // console.log(comment)
-        let result = `${comment.username}: ${comment.comment}`
-        addComment(gameId, result)
-    }
-    const onChange = (e) => {
-        setComment(state => ({
-            ...state,
-            [e.target.name]: e.target.value
-        }))
-    }
+        const formData = new FormData(e.target)
+        const comment = formData.get('comment')
 
-    const validateUsername = (e) => {
-        const username = e.target.value;
-        let errorMessage = '';
-
-        if (username.length < 4) {
-            errorMessage = 'Username must be longer than 4 charachters'
-        } else if (username.length > 10) {
-            errorMessage = 'Username must be shorter than 10 charachters'
+        commentService.create(gameId, comment)
+            .then(result => {
+                console.log(result)
+                addComment(gameId, comment)
+            })
+    }
+        const gameDeleteHandler=()=>{
+          const confirmation= window.confirm('Are you sure you want to delete this game?')
+       
+          if(confirmation){
+            gameService.remove(gameId)
+            .then(()=>{
+                gameRemove(gameId);
+                navigate('/catalog')
+            })
+          }
+        
         }
-
-        setError(state => ({
-            ...state,
-            username: errorMessage
-        }))
-    }
 
     return (
         <section id="game-details">
@@ -74,14 +63,14 @@ const Details = () => {
                 <div className="details-comments">
                     <h2>Comments:</h2>
                     <ul>
-                        {/* {currentGame.comments?.map(x =>
-                            <li className="comment">
+                     {currentGame.comments?.map(x =>
+                            <li key={x} className="comment">
                                 <p> {x}</p>
                             </li>
-                        )} */}
+                        )} 
                     </ul>
 
-                    {/* {!currentGame.comments && <p className="no-comment">No comments.</p>} */}
+                     {!currentGame.comments && <p className="no-comment">No comments.</p>}
 
                 </div>
 
@@ -89,32 +78,21 @@ const Details = () => {
                     <Link to={`/catalog/${gameId}/edit`} className="button">
                         Edit
                     </Link>
-                    <Link to="" className="button">
+                    <button onClick={gameDeleteHandler} className="button">
                         Delete
-                    </Link>
+                    </button>
                 </div>
             </div>
 
-            {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
+
             <article className="create-comment">
                 <label>Add new comment:</label>
                 <form className="form" onSubmit={addCommentHandler}>
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="John Doe"
-                        onChange={onChange}
-                        onBlur={validateUsername}
-                        value={comment.username}
-                    />
-                    {error.username &&
-                        <div style={{ color: 'red' }}>{error.username}</div>
-                    }
+
                     <textarea
                         name="comment"
                         placeholder="Comment......"
-                        onChange={onChange}
-                        value={comment.comment}
+                   
                     />
                     <input
                         className="btn submit"
