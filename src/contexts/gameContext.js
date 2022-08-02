@@ -3,17 +3,40 @@ import { useNavigate } from "react-router-dom";
 import * as gameService from '../services/GameService'
 export const GameContext = createContext();
 
+const gameReducer = (state, action) => {
+    // console.log('old state:' , state)
+    // console.log('new State:', value)
+    switch(action.type){
+        case 'ADD_GAMES':
+            return [...action.payload];
+        case 'ADD_GAME':
+            return [...state, action.payload ];
+        case 'EDIT_GAME':
+            return state.map(x=>x._id === action.gameId ? action.paylod : x)  
+        default: 
+            return state;
+    }
+
+}
 
 export const GameProvider = ({
     children
 }) => {
-    const gameReducer = (state, value) => {
-        console.log('old state:' , state)
-        console.log('new State:', value)
-        return value;
-    }
-    const [games, dispatcher] = useReducer(gameReducer,[]);
+  
     const navigate = useNavigate();
+    const [games, dispatch] = useReducer(gameReducer,[]);
+
+    useEffect(() => {
+        gameService.getAll()
+            .then(result => {
+                const action={
+                    type: 'ADD_GAMES',
+                    payload: result
+                };
+                // console.log(result)
+                dispatch(action)
+            });
+    }, [])
     const addComment = (gameId, comment) => {
         // setGames(state => {
         //     const game = state.find(x => x._id === gameId)
@@ -28,24 +51,22 @@ export const GameProvider = ({
     }
 
     const gameAdd = (gameData) => {
-        // setGames(state => [
-        //     ...state,
-        //     gameData
-        // ]);
+       dispatch({
+        type: 'ADD_GAME',
+        payload:gameData
+       })
         navigate('/catalog')
     }
 
     const gameEdit = (gameId, gameData) => {
+        dispatch({type: 'EDIT_GAME',
+         payload: gameData,
+         gameId
+    })
         // setGames(state => state.map(x => x._id === gameId ? gameData : x))
     }
 
-    useEffect(() => {
-        gameService.getAll()
-            .then(result => {
-                // console.log(result)
-                dispatcher(result)
-            })
-    }, [])
+ 
     return (
         <GameContext.Provider value={{ games, gameAdd, gameEdit, addComment }}>
             {children}

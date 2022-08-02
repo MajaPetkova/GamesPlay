@@ -1,6 +1,6 @@
 
 import { useContext } from 'react';
-import { GameContext } from '../../contexts/gameContext';
+import { GameContext } from '../../contexts/GameContext';
 import LatestGame from './latestGame/LatestGame';
 
 

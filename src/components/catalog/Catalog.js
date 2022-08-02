@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { GameContext } from "../../contexts/gameContext";
+import { GameContext } from "../../contexts/GameContext";
 import CatalogItem from "./catalogItem/CatalogItem";
 
 const Catalog=()=>{
-const games = useContext(GameContext)
+const {games} = useContext(GameContext)
 return (
     <section id="catalog-page">
     <h1>All Games</h1> 
@@ -12,7 +12,6 @@ return (
    ? games.map(x=><CatalogItem key={x._id} game={x}/>)
    : <h3 className="no-articles">No articles yet</h3>}
     
-   
   </section>
 )
 

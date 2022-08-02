@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import * as gameService from '../../services/GameService';
-import { GameContext } from "../../contexts/gameContext";
+import { GameContext } from "../../contexts/GameContext";
 
 const Details = () => {
     

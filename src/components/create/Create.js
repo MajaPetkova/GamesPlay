@@ -1,6 +1,6 @@
 import * as gameService from '../../services/GameService'
 import { useContext } from 'react';
-import { GameContext } from '../../contexts/gameContext';
+import { GameContext } from '../../contexts/GameContext';
 
 const Create = () => {
     const {gameAdd}= useContext(GameContext);

@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext';
-import { GameProvider } from './contexts/gameContext';
+import { GameProvider } from './contexts/GameContext';
 
 
 import Catalog from './components/catalog/Catalog';
