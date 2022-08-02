@@ -1,12 +1,13 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as gameService from '../../services/GameService';
+import { GameContext } from "../../contexts/gameContext";
 
-const Details = ({
-    addComment
-         }) => {
-    const {gameId}= useParams();
-    const [currentGame, setCurrentGame]= useState({});
+const Details = () => {
+    
+    const { addComment } = useContext(GameContext)
+    const { gameId } = useParams();
+    const [currentGame, setCurrentGame] = useState({});
 
 
     const [comment, setComment] = useState({
@@ -17,15 +18,15 @@ const Details = ({
         username: '',
         comment: ''
     });
- 
-    useEffect(()=>{
-        gameService.getOne(gameId)
-           .then(result=>{
-             setCurrentGame(result)
-           })
-    },[])
 
- 
+    useEffect(() => {
+        gameService.getOne(gameId)
+            .then(result => {
+                setCurrentGame(result)
+            })
+    }, [])
+
+
 
     const addCommentHandler = (e) => {
         e.preventDefault()
@@ -93,7 +94,7 @@ const Details = ({
                     </Link>
                 </div>
             </div>
-          
+
             {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
             <article className="create-comment">
                 <label>Add new comment:</label>
@@ -106,9 +107,9 @@ const Details = ({
                         onBlur={validateUsername}
                         value={comment.username}
                     />
-                     {error.username &&
-                     <div style={{color:'red'}}>{error.username}</div>
-                     }
+                    {error.username &&
+                        <div style={{ color: 'red' }}>{error.username}</div>
+                    }
                     <textarea
                         name="comment"
                         placeholder="Comment......"
