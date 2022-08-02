@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import * as gameService from './services/gameSevice';
+import * as gameService from './services/GameService';
 
 import { Routes, Route, useNavigate } from 'react-router-dom'
-import { AuthContext } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import { GameContext } from './contexts/gameContext';
 
 
@@ -14,21 +14,13 @@ import Login from './components/login/Login';
 import Register from './components/register/Register';
 import Logout from './components/logout/Logout'
 import Details from './components/details/Details';
-import { useLocalStorage } from './hooks/useLocalStorage';
+
 import EditGame from './components/edit/EditGame';
 
 function App() {
     const [games, setGames] = useState([]);
-    const [auth, setAuth] = useLocalStorage('auth', {});
+   
     const navigate = useNavigate();
-
-    const userLogin = (authData) => {
-        setAuth(authData)
-
-    }
-    const userLogout = () => {
-        setAuth({})
-    }
 
     const addComment = (gameId, comment) => {
         setGames(state => {
@@ -63,7 +55,7 @@ function App() {
             })
     }, [])
     return (
-        <AuthContext.Provider value={{ user: auth, userLogin, userLogout }}>
+<AuthProvider>
 
             <div id="box">
                 <Header />
@@ -83,9 +75,8 @@ function App() {
                     </main>
                     </GameContext.Provider>
             </div>
-        </AuthContext.Provider>
-
-    );
+</AuthProvider>
+          );
 }
 
 export default App;

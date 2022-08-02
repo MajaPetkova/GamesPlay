@@ -1,4 +1,4 @@
-import * as gameService from '../../services/gameSevice'
+import * as gameService from '../../services/GameService'
 import { useContext } from 'react';
 import { GameContext } from '../../contexts/gameContext';
 
@@ -11,9 +11,9 @@ const Create = () => {
         const gameData = Object.fromEntries(new FormData(e.target))
         //    console.log(gameData);
         gameService.create(gameData)
-            .then(res => {
-                // console.log(res)
-             gameAdd(res)
+            .then(result => {
+                // console.log(result)
+             gameAdd(result)
             })
         };
 

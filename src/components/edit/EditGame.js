@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState} from "react";
-import { useParams, Navigate, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { GameContext } from "../../contexts/gameContext";
-import * as gameService from '../../services/gameSevice';
+import * as gameService from '../../services/GameService';
 
 
 const EditGame = () => {
@@ -25,10 +25,10 @@ const EditGame = () => {
         const gameData = Object.fromEntries(new FormData(e.target))
         //    console.log(gameData);
         gameService.edit(gameId, gameData)
-            .then(res => {
+            .then(result => {
                 // console.log(res)
-             gameEdit(gameId, res)
-            navigate(`/catalog/${res._id}`)
+             gameEdit(gameId, result)
+            navigate(`/catalog/${gameId}`)
             })
         };
 

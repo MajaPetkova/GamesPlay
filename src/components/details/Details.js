@@ -1,11 +1,10 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import * as gameService from '../../services/gameSevice';
+import * as gameService from '../../services/GameService';
 
 const Details = ({
-
     addComment
-}) => {
+         }) => {
     const {gameId}= useParams();
     const [currentGame, setCurrentGame]= useState({});
 
@@ -24,7 +23,7 @@ const Details = ({
            .then(result=>{
              setCurrentGame(result)
            })
-    })
+    },[])
 
  
 
@@ -86,7 +85,7 @@ const Details = ({
                 </div>
 
                 <div className="buttons">
-                    <Link to={`/catalog/${currentGame._id}/edit`} className="button">
+                    <Link to={`/catalog/${gameId}/edit`} className="button">
                         Edit
                     </Link>
                     <Link to="" className="button">

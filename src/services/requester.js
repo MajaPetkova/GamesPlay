@@ -14,7 +14,7 @@ export const request = async (method, url, data) => {
         let buildRequest;
 
         if (method === 'GET') {
-            buildRequest = fetch(url,{headers})
+            buildRequest = fetch(url)
         } else {
             buildRequest = fetch(url, {
                 method,
@@ -26,9 +26,9 @@ export const request = async (method, url, data) => {
             })
 
         }
-        const responce = await buildRequest;
-        console.log(responce)
-        const result = await responce.json();
+        const response = await buildRequest;
+        // console.log(response)
+        const result = await response.json();
         return result;
     } catch (error) {
         console.log(error);
